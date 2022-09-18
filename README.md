@@ -1,5 +1,7 @@
 # GoAuto
 
+## Sprendžiamo uždavinio aprašymas
+
 ### Sistemos paskirtis
 
 Projekto tikslas - suprojektuoti patogią bei intuityvią svetainę, leidžiančią skaityti bei rašyti atsiliepimus apie konkrečius automobilių modelius.
@@ -10,6 +12,40 @@ Vartotojas, norėdamas naudotis čia platformą, prisiregistruos prie internetin
 
 ### Funkciniai reikalavimai
 
+#### Neregistruotas sistemos naudotojas galės:
+ 1.	Peržiūrėti platformos reprezentacinį puslapį;
+ 2.	Prisiregistruoti ir/arba prisijungti prie internetinės aplikacijos.
+
+#### Registruotas sistemos naudotojas galės:
+ 1.	Atsijungti nuo internetinės aplikacijos;
+ 2.	Prisijungti (užsiregistruoti) prie platformos;
+ 3.	Peržiūrėti atsiliepimus;
+ 4.	Pasirinktą atsiliepimą įvertinti;
+ 5.	Rašyti savo atsiliepimą;
+ 6.	Matyti visus savo atsiliepimus – pasirinktus pašalinti arba atnaujinti pakeitus tam tikrus duomenis;
+ 7.	Matyti bendrus savo visų atsiliepimų duomenis – susumuotus teigiamus ir neigiamus įvertinimus, bendrą parašytą atsiliepimų       skaičių.
+
+#### Administratorius galės:
+ 1.	Matyti visus vartotojus;
+ 2.	Matyti visus atsiliepimus;
+ 3.	Matyti konkretaus vartotojo atsiliepimus;
+ 4.	Pašalinti vartotoją arba suteikti jam administratoriaus teises;
+ 5.	Pašalinti atsiliepimą;
+
+## Sistemos architektūra
+Sistemos sudedamosios dalys:
+
+•	Kliento pusė (angl. Front-End) – naudojant Vue.js;
+
+•	Serverio pusė (angl. Back-End) – naudojant C# .NET. Duomenų bazė – MySQL.
+
+
+Pav. 1 pavaizduota kuriamos sistemos diegimo diagrama. Sistemos talpinimui yra naudojamas Azure serveris. Kiekviena sistemos dalis yra diegiama tame pačiame serveryje. Internetinė aplikacija yra pasiekiama per HTTP protokolą. Šios sistemos veikimui (pvz., duomenų manipuliavimui su duomenų baze) yra reikalingas GoAuto API.
+
+![image](https://user-images.githubusercontent.com/79079004/190922975-a71a1e52-a0bb-4c15-8938-74bf302139ba.png)
+
+<div align="center">Pav. 1 Sistemos GoAuto diegimo diagrama</div>
+                                                     
 
 
 
