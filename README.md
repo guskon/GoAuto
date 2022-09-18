@@ -42,7 +42,8 @@ Sistemos sudedamosios dalys:
 
 Pav. 1 pavaizduota kuriamos sistemos diegimo diagrama. Sistemos talpinimui yra naudojamas Azure serveris. Kiekviena sistemos dalis yra diegiama tame pačiame serveryje. Internetinė aplikacija yra pasiekiama per HTTP protokolą. Šios sistemos veikimui (pvz., duomenų manipuliavimui su duomenų baze) yra reikalingas GoAuto API.
 
-![image](https://user-images.githubusercontent.com/79079004/190922975-a71a1e52-a0bb-4c15-8938-74bf302139ba.png)
+![image](https://user-images.githubusercontent.com/79079004/190923953-9fe4ce91-234b-43f9-9436-2eec6484dedb.png)
+
 
 <div align="center">Pav. 1 Sistemos GoAuto diegimo diagrama</div>
                                                      
