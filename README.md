@@ -12,7 +12,7 @@ Vartotojas, norėdamas naudotis čia platformą, prisiregistruos prie internetin
 
 ### Funkciniai reikalavimai
 
-#### Neregistruotas sistemos naudotojas galės:
+#### Neregistruotas/neprisijungęs sistemos naudotojas galės:
  1.	Peržiūrėti platformos reprezentacinį puslapį;
  2.	Prisiregistruoti ir/arba prisijungti prie internetinės aplikacijos.
 
