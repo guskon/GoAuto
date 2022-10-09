@@ -23,21 +23,23 @@ Vartotojas, norėdamas naudotis čia platformą, prisiregistruos prie internetin
  4.	Pasirinktą atsiliepimą įvertinti;
  5.	Rašyti savo atsiliepimą;
  6.	Matyti visus savo atsiliepimus – pasirinktus pašalinti arba atnaujinti pakeitus tam tikrus duomenis;
- 7.	Matyti bendrus savo visų atsiliepimų duomenis – susumuotus teigiamus ir neigiamus įvertinimus, bendrą parašytą atsiliepimų       skaičių.
+ 7.	Naudotis atsiliepimų paieška;
+ 8.	Matyti bendrus savo visų atsiliepimų duomenis – susumuotus teigiamus ir neigiamus įvertinimus, bendrą parašytą atsiliepimų skaičių.
 
 #### Administratorius galės:
  1.	Matyti visus vartotojus;
  2.	Matyti visus atsiliepimus;
  3.	Matyti konkretaus vartotojo atsiliepimus;
- 4.	Pašalinti vartotoją arba suteikti jam administratoriaus teises;
- 5.	Pašalinti atsiliepimą;
+ 4.	Naudotis atsiliepimų paieška;
+ 5.	Pašalinti vartotoją arba suteikti jam administratoriaus teises;
+ 6.	Pašalinti atsiliepimą;
 
 ## Sistemos architektūra
 Sistemos sudedamosios dalys:
 
 •	Kliento pusė (angl. Front-End) – naudojant Vue.js;
 
-•	Serverio pusė (angl. Back-End) – naudojant C# .NET. Duomenų bazė – MySQL.
+•	Serverio pusė (angl. Back-End) – naudojant C# .NET. Duomenų bazė – MSSQL.
 
 
 Pav. 1 pavaizduota kuriamos sistemos diegimo diagrama. Sistemos talpinimui yra naudojamas Azure serveris. Kiekviena sistemos dalis yra diegiama tame pačiame serveryje. Internetinė aplikacija yra pasiekiama per HTTP protokolą. Šios sistemos veikimui (pvz., duomenų manipuliavimui su duomenų baze) yra reikalingas GoAuto API.
