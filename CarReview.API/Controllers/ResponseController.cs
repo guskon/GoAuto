@@ -36,7 +36,7 @@ namespace CarReview.API.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = await _context.Users.FirstOrDefaultAsync<User>(x => x.Id.Equals(newResponse.FkUserId));
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(newResponse.UserId));
 
                 if (user == null)
                 {
@@ -50,7 +50,7 @@ namespace CarReview.API.Controllers
                     return NotFound("Review by this id does not exist!");
                 }
 
-                var existingResponse = await _context.Responses.FirstOrDefaultAsync(x => x.FkUserId.Equals(newResponse.FkUserId)
+                var existingResponse = await _context.Responses.FirstOrDefaultAsync(x => x.UserId.Equals(newResponse.UserId)
                     && x.FkReviewId.Equals(newResponse.FkReviewId));
 
                 if (existingResponse == null)

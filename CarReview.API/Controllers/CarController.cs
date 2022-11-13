@@ -13,7 +13,7 @@ namespace CarReview.API.Controllers
     {
         private readonly CarReviewDbContext _context;
         private readonly IMapper _mapper;
-
+    
         public CarController(CarReviewDbContext context, IMapper mapper)
         {
             _context = context;

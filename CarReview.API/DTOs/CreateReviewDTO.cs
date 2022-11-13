@@ -19,8 +19,8 @@ namespace CarReview.API.DTOs
         [Required]
         [Range(1, 10, ErrorMessage = "Final score value has to be between 1 and 10!")]
         public int FinalScore { get; set; }
-        [Required]
-        public int UserId { get; set; }
+        //[Required]
+        //public string UserId { get; set; }
         [Required]
         public int CarId { get; set; }
     }
