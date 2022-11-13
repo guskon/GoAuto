@@ -12,7 +12,7 @@
         public string Positives { get; set; }
         public string Negatives { get; set; }
         public int FinalScore { get; set; }
-        public int FkUserId { get; set; }
+        public string UserId { get; set; }
         public int FkCarId { get; set; }
     }
 }

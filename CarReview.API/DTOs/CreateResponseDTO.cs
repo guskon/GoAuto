@@ -5,7 +5,7 @@ namespace CarReview.API.DTOs
     public class CreateResponseDTO
     {
         [Required]
-        public int FkUserId { get; set; }
+        public int UserId { get; set; }
         [Required]
         public int FkReviewId { get; set; }
         [Required]
