@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CarReview.API.Controllers
 {
     [ApiController]
-    [AllowAnonymous]
-    [Route("api")]
+    [Route("API")]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<CarReviewUser> _userManager;
@@ -21,7 +20,7 @@ namespace CarReview.API.Controllers
         }
 
         [HttpPost]
-        [Route(template: "register")]
+        [Route(template: "Register")]
         public async Task<IActionResult> Register(RegisterUserDTO registerUserDTO)
         {
             var user = await _userManager.FindByNameAsync(registerUserDTO.UserName);
@@ -50,7 +49,7 @@ namespace CarReview.API.Controllers
         }
 
         [HttpPost]
-        [Route(template: "login")]
+        [Route(template: "Login")]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             var user = await _userManager.FindByNameAsync(loginDTO.UserName);
@@ -72,6 +71,28 @@ namespace CarReview.API.Controllers
             var accessToken = _jwtTokenService.CreateAccessToken(user.UserName, user.Id, roles);
 
             return Ok(new SuccessfulLoginDTO(accessToken));
+        }
+
+        [HttpPost]
+        [Route(template: "PromoteUser")]
+        [Authorize(Roles = CarReviewRoles.Admin)]
+        public async Task<IActionResult> PromoteUser(PromoteUserDTO userDTO)
+        {
+            var existingUser = await _userManager.FindByNameAsync(userDTO.UserName);
+
+            if (existingUser == null)
+            {
+                return BadRequest("User does not exist!");
+            }
+
+            var addToRoleResult = await _userManager.AddToRoleAsync(existingUser, CarReviewRoles.Admin);
+
+            if (!addToRoleResult.Succeeded)
+            {
+                return BadRequest("Could not add user to roles!");
+            }
+
+            return NoContent();
         }
     }
 }

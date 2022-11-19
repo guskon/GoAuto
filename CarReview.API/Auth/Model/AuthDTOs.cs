@@ -4,6 +4,8 @@ namespace CarReview.API.Auth.Model;
 
 public record RegisterUserDTO([Required] string UserName, [EmailAddress][Required] string Email, [Required] string Password);
 
+public record PromoteUserDTO(string UserName);
+
 public record LoginDTO(string UserName, string Password);
 
 public record UserDTO(string Id, string UserName, string Email);
