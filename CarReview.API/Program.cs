@@ -7,6 +7,8 @@ using System.Text;
 using CarReview.API.Auth;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,6 @@ JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
@@ -26,6 +27,17 @@ builder.Services.AddIdentity<CarReviewUser, IdentityRole>()
 builder.Services.AddDbContext<CarReviewDbContext>();
 builder.Services.AddScoped<AuthDBSeeder>();
 
+builder.Services.AddSwaggerGen(options => {
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Standard Authorization header using the Bearer scheme (\"bearer { token }\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 builder.Services.AddAuthentication(options =>
     {

@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CarReview.API.Auth.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarReview.API.Models
 {
-    public partial class Car
+    public partial class Car : IUserOwnedResource
     {
         public Car()
         {
@@ -26,6 +27,9 @@ namespace CarReview.API.Models
         public DateTime StartYear { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime EndYear { get; set; }
+
+        [Required]
+        public string UserId { get; set; }
 
         [InverseProperty("FkCar")]
         public virtual ICollection<Review> Reviews { get; set; }

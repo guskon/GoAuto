@@ -3,24 +3,26 @@ using Microsoft.EntityFrameworkCore;
 using CarReview.API.Models;
 using CarReview.API.Repository;
 using CarReview.API.DTOs;
-using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using CarReview.API.Auth.Model;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace CarReview.API.Controllers
 {
     [ApiController]
-    [Route("Cars")]
-    public class CarController : Controller
+    [Route("API/Cars")]
+    public class CarController : ControllerBase
     {
         private readonly CarReviewDbContext _context;
-        private readonly IMapper _mapper;
-    
-        public CarController(CarReviewDbContext context, IMapper mapper)
+
+        public CarController(CarReviewDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         [HttpGet]
+        [Authorize(Roles = CarReviewRoles.ReviewUser)]
         public async Task<IActionResult> Get()
         {
             if (_context.Cars.Count() == 0)
@@ -42,6 +44,7 @@ namespace CarReview.API.Controllers
                     Generation = car.Generation,
                     StartYear = car.StartYear.Year.ToString(),
                     EndYear = car.EndYear.Year.ToString(),
+                    UserId = car.UserId
                 });
             }
 
@@ -49,6 +52,7 @@ namespace CarReview.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = CarReviewRoles.ReviewUser)]
         public async Task<IActionResult> GetById(int id)
         {
             if (_context.Cars.Count() == 0)
@@ -71,12 +75,14 @@ namespace CarReview.API.Controllers
                 Generation = car.Generation,
                 StartYear = car.StartYear.Year.ToString(),
                 EndYear = car.EndYear.Year.ToString(),
+                UserId = car.UserId
             };
 
             return Ok(mappedCar);
         }
 
         [HttpPost]
+        [Authorize(Roles = CarReviewRoles.Admin)]
         public async Task<IActionResult> Create(CarDTO car)
         {
             if (ModelState.IsValid)
@@ -106,6 +112,7 @@ namespace CarReview.API.Controllers
                     Generation = car.Generation,
                     StartYear = new DateTime(startYear, 1, 1),
                     EndYear = new DateTime(endYear, 1, 1),
+                    UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
                 };
 
                 await _context.AddAsync(newCar);
@@ -117,6 +124,7 @@ namespace CarReview.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = CarReviewRoles.Admin)]
         public async Task<IActionResult> Update(int id, CarDTO updatedCar)
         {
             if (_context.Cars.Count() == 0)
@@ -167,6 +175,7 @@ namespace CarReview.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = CarReviewRoles.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
             if (_context.Cars.Count() == 0)
@@ -186,7 +195,8 @@ namespace CarReview.API.Controllers
             return NotFound("Car by this id does not exist!");
         }
 
-        [HttpGet("{brand}/Filter by brand")]
+        [HttpGet("{brand}/FilterByBrand")]
+        [Authorize(Roles = CarReviewRoles.ReviewUser)]
         public async Task<IActionResult> FilterByBrand(string brand)
         {
             if (_context.Cars.Count() == 0)
@@ -219,7 +229,8 @@ namespace CarReview.API.Controllers
             return Ok(mappedCars);
         }
 
-        [HttpPost("Filter by model")]
+        [HttpPost("FilterByModel")]
+        [Authorize(Roles = CarReviewRoles.ReviewUser)]
         public async Task<IActionResult> FilterByModel(FilterByModelDTO dto)
         {
             if (_context.Cars.Count() == 0)
@@ -244,7 +255,8 @@ namespace CarReview.API.Controllers
             }
         }
 
-        [HttpPost("Get id by generation")]
+        [HttpPost("GetIdByGeneration")]
+        [Authorize(Roles = CarReviewRoles.ReviewUser)]
         public async Task<IActionResult> GetCarIdByGeneration(FilterByGenerationDTO dto)
         {
             if (_context.Cars.Count() == 0)
@@ -276,13 +288,13 @@ namespace CarReview.API.Controllers
 
         private async Task<Car> GetCar(CarDTO car)
         {
-            return await _context.Cars.FirstOrDefaultAsync<Car>(x => x.Brand.Equals(car.Brand) && x.Model.Equals(car.Model)
+            return await _context.Cars.FirstOrDefaultAsync(x => x.Brand.Equals(car.Brand) && x.Model.Equals(car.Model)
                  && x.Generation.Equals(car.Generation));
         }
 
         private async Task<Car> GetCarForUpdate(CarDTO car)
         {
-            return await _context.Cars.FirstOrDefaultAsync<Car>(x => x.Brand.Equals(car.Brand) && x.Model.Equals(car.Model)
+            return await _context.Cars.FirstOrDefaultAsync(x => x.Brand.Equals(car.Brand) && x.Model.Equals(car.Model)
                  && x.Generation.Equals(car.Generation) && x.StartYear.Equals(new DateTime(Convert.ToInt32(car.StartYear), 1, 1))
                  && x.EndYear.Equals(new DateTime(Convert.ToInt32(car.EndYear), 1, 1)));
         }

@@ -18,5 +18,6 @@ namespace CarReview.API.DTOs
         [Required]
         [StringLength(4, MinimumLength = 4, ErrorMessage = "End year has to be exactly 4 digits!")]
         public string EndYear { get; set; }
+        public string UserId { get; set; }
     }
 }

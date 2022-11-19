@@ -1,27 +1,33 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration.Conventions;
+using CarReview.API.Auth.Model;
 using CarReview.API.DTOs;
 using CarReview.API.Models;
 using CarReview.API.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace CarReview.API.Controllers
 {
     [ApiController]
-    [Route("Responses")]
+    [Route("API/Responses")]
     public class ResponseController : Controller
     {
         private readonly CarReviewDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IAuthorizationService _authorizationService;
 
-        public ResponseController(CarReviewDbContext context, IMapper mapper)
+        public ResponseController(CarReviewDbContext context, IMapper mapper, IAuthorizationService authorizationService)
         {
             _context = context;
             _mapper = mapper;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost]
+        [Authorize(Roles = CarReviewRoles.ReviewUser)]
         public async Task<IActionResult> CreateResponse(CreateResponseDTO newResponse)
         {
             if (_context.Users.Count() == 0)
@@ -36,26 +42,30 @@ namespace CarReview.API.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(newResponse.UserId));
-
-                if (user == null)
-                {
-                    return NotFound("User by this id does not exist!");
-                }
-
-                var foundReview = await _context.Reviews.FirstOrDefaultAsync<Review>(x => x.Id.Equals(newResponse.FkReviewId));
+                var foundReview = await _context.Reviews.FirstOrDefaultAsync(x => x.Id.Equals(newResponse.FkReviewId));
 
                 if (foundReview == null)
                 {
                     return NotFound("Review by this id does not exist!");
                 }
 
-                var existingResponse = await _context.Responses.FirstOrDefaultAsync(x => x.UserId.Equals(newResponse.UserId)
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, foundReview, policyName: PolicyNames.ResourceOwner);
+                if (!authorizationResult.Succeeded)
+                {
+                    return Forbid();
+                }
+
+                var existingResponse = await _context.Responses.FirstOrDefaultAsync(x => x.UserId.Equals(User.FindFirstValue(JwtRegisteredClaimNames.Sub))
                     && x.FkReviewId.Equals(newResponse.FkReviewId));
 
                 if (existingResponse == null)
                 {
-                    await _context.Responses.AddAsync(_mapper.Map<Response>(newResponse));
+                    await _context.Responses.AddAsync(new Response
+                    {
+                        FkReviewId = newResponse.FkReviewId,
+                        Status = newResponse.Status,
+                        UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                    });
 
                     if (newResponse.Status == 1)
                     {
@@ -127,6 +137,7 @@ namespace CarReview.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = CarReviewRoles.ReviewUser)]
         public async Task<IActionResult> Get()
         {
             var responses = await _context.Responses.ToListAsync();
