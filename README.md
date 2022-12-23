@@ -695,13 +695,13 @@ Metodas yra prieinamas tik registuotiems vartotojams ir sukuria naują atsiliepi
 
 ```
 
-### GET API/Reviews
+### GET API/Reviews/{id}/GetByCarId
 
-Metodas yra prieinamas tik registuotiems vartotojams ir grąžina visus atsiliepimus
+Metodas yra prieinamas tik registuotiems vartotojams ir grąžina visus atsiliepimus pagal automobilio id
 
 #### Metodo URL
 
-`https://localhost:7221/API/Reviews`
+`https://localhost:7221/API/Reviews/{id}/GetByCarId`
 
 #### Atsakymų kodai
 
@@ -715,7 +715,52 @@ Metodas yra prieinamas tik registuotiems vartotojams ir grąžina visus atsiliep
 
 #### Užklausos pavyzdys
 
-`GET https://localhost:7221/API/Reviews`
+`GET https://localhost:7221/API/Reviews/3/GetByCarId`
+
+
+#### Atsako pavyzdys
+
+```
+[
+  {
+    "id": 14,
+    "text": "Geras auto",
+    "creationDate": "2022-12-23T20:17:35.537",
+    "engineDisplacement": 3,
+    "enginePower": 200,
+    "likes": 0,
+    "dislikes": 0,
+    "positives": "Gera kokybe",
+    "negatives": "Brangus remontas",
+    "finalScore": 8,
+    "userId": "1012f8e2-fe89-45fe-92d6-678730085ece",
+    "fkCarId": 3
+  }
+]
+
+```
+
+### GET API/Reviews/{userName}/review
+
+Metodas yra prieinamas tik registuotiems vartotojams ir grąžina visus atsiliepimus pagal vartotojo vardą
+
+#### Metodo URL
+
+`https://localhost:7221/API/Reviews/{userName}/review`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+| Not found    | 404   |
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Reviews/admin/review`
 
 
 #### Atsako pavyzdys
@@ -742,6 +787,256 @@ Metodas yra prieinamas tik registuotiems vartotojams ir grąžina visus atsiliep
 ]
 
 ```
+
+### GET API/Reviews/{id}
+
+Metodas yra prieinamas tik registuotiems vartotojams ir grąžina atsiliepimą pagal id
+
+#### Metodo URL
+
+`https://localhost:7221/API/Reviews/{id}`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+| Not found    | 404   |
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Reviews/14`
+
+
+#### Atsako pavyzdys
+
+```
+{
+  "id": 14,
+  "text": "Geras auto",
+  "creationDate": "2022-12-23T20:17:35.537",
+  "engineDisplacement": 3,
+  "enginePower": 200,
+  "likes": 0,
+  "dislikes": 0,
+  "positives": "Gera kokybe",
+  "negatives": "Brangus remontas",
+  "finalScore": 8,
+  "userId": "1012f8e2-fe89-45fe-92d6-678730085ece",
+  "fkCarId": 3
+}
+
+```
+
+### PUT API/Reviews/{id}
+
+Metodas yra prieinamas tik registuotiems vartotojams ir atnaujina atsiliepimą
+
+#### Metodo URL
+
+`https://localhost:7221/API/Reviews/{id}`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| No content   | 204   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+| Not found    | 404   |
+
+#### Parametrai
+
+| Pavadinimas        | Ar būtinas? |    Apibūdinimas       | Pavyzdys   |
+| -------------------|-------------|-----------------------|------------|
+| brand              | Taip        | Automobilio markė     | Audi       |
+| model              | Taip        | Automobilio modelis   | A6         |
+| generation         | Taip        | Automobilio karta     | C6         |
+| text               | Taip        | Atsiliepimo tekstas   | Geras auto |
+| engineDisplacement | Taip        | Variklio tūris        | 2011       |
+| enginePower        | Taip        | Variklio galia        | 2011       |
+| positives          | Taip        | Pranašumai            | 2011       |
+| negatives          | Taip        | Trūkumai              | 2011       |
+| finalScore         | Taip        | Galutinis įvertinimas | 2011       |
+
+
+#### Užklausos pavyzdys
+
+`PUT https://localhost:7221/API/Reviews/14`
+
+```
+{
+  "text": "Neblogas automobilis viskam",
+  "engineDisplacement": 3,
+  "enginePower": 150,
+  "positives": "Gera kokybė",
+  "negatives": "Brangus remontas",
+  "finalScore": 7,
+  "brand": "Audi",
+  "model": "A4",
+  "generation": "B8"
+}
+
+```
+
+#### Atsako pavyzdys
+
+```
+Atsako kodas 204
+
+```
+
+### DELETE API/Reviews/{id}
+
+Metodas yra prieinamas tik registuotiems vartotojams ir ištrina atsiliepimą pagal id
+
+#### Metodo URL
+
+`https://localhost:7221/API/Reviews/{id}`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| No content   | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Not found    | 404   |
+
+#### Užklausos pavyzdys
+
+`DELETE https://localhost:7221/API/Reviews/14`
+
+#### Atsako pavyzdys
+
+```
+Atsako kodas 204
+
+```
+
+### GET API/Reviews/GetResponsesResult
+
+Metodas yra prieinamas tik registuotiems vartotojams ir grąžina atsiliepimo teigiamų bei neigiamų įvertinimų sumas
+
+#### Metodo URL
+
+`https://localhost:7221/API/Reviews/GetResponsesResult`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Not found    | 404   |
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Reviews/GetResponsesResult`
+
+
+#### Atsako pavyzdys
+
+```
+{
+  "likes": 5,
+  "dislikes": 2
+}
+
+```
+
+### GET API/Reviews/{userId}/GetReviewCount
+
+Metodas yra prieinamas tik registuotiems vartotojams ir grąžina vartotojo parašytų atsiliepimų skaičių
+
+#### Metodo URL
+
+`https://localhost:7221/API/Reviews/{userId}/GetReviewCount`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Not found    | 404   |
+| Bad request  | 400   |
+
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Reviews/1012f8e2-fe89-45fe-92d6-678730085ece/GetReviewCount`
+
+#### Atsako pavyzdys
+
+```
+5
+
+```
+
+### GET API/Reviews/{userId}/GetByUserId
+
+Metodas yra prieinamas tik registuotiems vartotojams ir grąžina atsiliepimus pagal parašusio vartotojo vardą
+
+#### Metodo URL
+
+`https://localhost:7221/API/Reviews/{userId}/GetByUserId`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Not found    | 404   |
+| Bad request  | 400   |
+
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Reviews/1012f8e2-fe89-45fe-92d6-678730085ece/GetByUserId`
+
+#### Atsako pavyzdys
+
+```
+[
+  {
+    "id": 14,
+    "text": "Neblogas automobilis viskam",
+    "creationDate": "2022-12-23T20:17:35.537",
+    "engineDisplacement": 3,
+    "enginePower": 150,
+    "likes": 0,
+    "dislikes": 0,
+    "positives": "Gera kokybe",
+    "negatives": "Brangus remontas",
+    "finalScore": 7,
+    "userId": "1012f8e2-fe89-45fe-92d6-678730085ece",
+    "fkCarId": 3
+  }
+]
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
