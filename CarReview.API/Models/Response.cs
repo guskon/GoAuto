@@ -13,7 +13,6 @@ namespace CarReview.API.Models
 
         [Required]
         public string UserId { get; set; }
-        //public CarReviewUser User { get; set; }
 
         [ForeignKey("FkReviewId")]
         [InverseProperty("Responses")]

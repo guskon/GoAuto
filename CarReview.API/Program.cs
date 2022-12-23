@@ -39,6 +39,11 @@ builder.Services.AddSwaggerGen(options => {
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -71,6 +76,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("corsapp");
 
 app.MapControllers();
 
