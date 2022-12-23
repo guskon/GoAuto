@@ -4,6 +4,7 @@ using CarReview.API.DTOs;
 using CarReview.API.Models;
 using CarReview.API.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,19 +17,63 @@ namespace CarReview.API.Controllers
     public class ReviewController : ControllerBase
     {
         private readonly CarReviewDbContext _context;
+        private readonly UserManager<CarReviewUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
-        public ReviewController(CarReviewDbContext context, IMapper mapper, IAuthorizationService authorizationService)
+        public ReviewController(CarReviewDbContext context, IMapper mapper, IAuthorizationService authorizationService, UserManager<CarReviewUser> userManager)
         {
             _context = context;
             _mapper = mapper;
             _authorizationService = authorizationService;
+            _userManager = userManager;
         }
+
+        //[HttpPost]
+        //[Authorize(Roles = CarReviewRoles.ReviewUser)]
+        //public async Task<IActionResult> Create(CreateReviewDTO newReview)
+        //{
+        //    if (_context.Cars.Count() == 0)
+        //    {
+        //        return NotFound("Currently there are no cars added!");
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        var car = await _context.Cars.FirstOrDefaultAsync(x => x.Id.Equals(newReview.CarId));
+
+        //        if (car == null)
+        //        {
+        //            return NotFound("Car by this id does not exist!");
+        //        }
+
+        //        Review review = new()
+        //        {
+        //            Text = newReview.Text,
+        //            CreationDate = DateTime.Now,
+        //            EngineDisplacement = newReview.EngineDisplacement,
+        //            EnginePower = newReview.EnginePower,
+        //            Likes = 0,
+        //            Dislikes = 0,
+        //            Positives = newReview.Positives,
+        //            Negatives = newReview.Negatives,
+        //            FinalScore = newReview.FinalScore,
+        //            UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
+        //            FkCarId = newReview.CarId,
+        //        };
+
+        //        await _context.Reviews.AddAsync(review);
+        //        await _context.SaveChangesAsync();
+
+        //        return StatusCode(201);
+        //    }
+
+        //    return BadRequest("Model is not valid!");
+        //}
 
         [HttpPost]
         [Authorize(Roles = CarReviewRoles.ReviewUser)]
-        public async Task<IActionResult> Create(CreateReviewDTO newReview)
+        public async Task<IActionResult> Create(AddReviewDTO newReview)
         {
             if (_context.Cars.Count() == 0)
             {
@@ -37,12 +82,7 @@ namespace CarReview.API.Controllers
 
             if (ModelState.IsValid)
             {
-                var car = await _context.Cars.FirstOrDefaultAsync(x => x.Id.Equals(newReview.CarId));
-
-                if (car == null)
-                {
-                    return NotFound("Car by this id does not exist!");
-                }
+                var carId = await GetCarByParameters(newReview.Brand, newReview.Model, newReview.Generation);
 
                 Review review = new()
                 {
@@ -56,16 +96,41 @@ namespace CarReview.API.Controllers
                     Negatives = newReview.Negatives,
                     FinalScore = newReview.FinalScore,
                     UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
-                    FkCarId = newReview.CarId,
+                    FkCarId = carId,
                 };
 
                 await _context.Reviews.AddAsync(review);
                 await _context.SaveChangesAsync();
 
-                return StatusCode(201);
+                var mappedReview = new GetReviewDTO2
+                {
+                    Id = review.Id,
+                    Brand = newReview.Brand,
+                    Model = newReview.Model,
+                    Generation = newReview.Generation,
+                    Username = User.FindFirstValue(ClaimTypes.Name),
+                    UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub),
+                    Text = review.Text,
+                    CreationDate = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString(),
+                    EngineDisplacement = review.EngineDisplacement,
+                    EnginePower = review.EnginePower,
+                    Likes = review.Likes,
+                    Dislikes = review.Dislikes,
+                    Positives = review.Positives,
+                    Negatives = review.Negatives,
+                    FinalScore = review.FinalScore,
+                };
+
+                return CreatedAtAction(nameof(Create), mappedReview);
             }
 
             return BadRequest("Model is not valid!");
+        }
+
+        private async Task<int> GetCarByParameters(string brand, string model, string generation)
+        {
+            var car = await _context.Cars.SingleOrDefaultAsync(x => x.Brand.Equals(brand) && x.Model.Equals(model) && x.Generation.Equals(generation));
+            return car.Id;
         }
 
         [HttpGet("{id}/GetByCarId")]
@@ -99,6 +164,61 @@ namespace CarReview.API.Controllers
             return Ok(reviews.Select((p) => _mapper.Map<GetReviewDTO>(p)));
         }
 
+        //[HttpGet]
+        //[Authorize(Roles = CarReviewRoles.ReviewUser)]
+        //public async Task<IActionResult> Get()
+        //{
+        //    if (_context.Reviews.Count() == 0)
+        //    {
+        //        return NotFound("Currently there are no reviews added!");
+        //    }
+
+        //    var reviews = await _context.Reviews.ToListAsync();
+
+        //    return Ok(reviews.Select((p) => _mapper.Map<GetReviewDTO>(p)));
+        //}
+
+        [HttpGet("{userName}/review")]
+        [Authorize(Roles = CarReviewRoles.ReviewUser)]
+        public async Task<IActionResult> GetByUsername(string userName)
+        {
+            if (_context.Reviews.Count() == 0)
+            {
+                return NotFound("Currently there are no reviews added!");
+            }
+
+            var reviews = await _context.Reviews.ToListAsync();
+
+            var mappedReviews = new List<GetReviewDTO2>();
+
+            foreach (var review in reviews)
+            {
+                var car = await GetCarById(review.FkCarId);
+                var user = await _userManager.FindByIdAsync(review.UserId);
+
+                mappedReviews.Add(new GetReviewDTO2
+                {
+                    Id = review.Id,
+                    Brand = car.Brand,
+                    Model = car.Model,
+                    Generation = car.Generation,
+                    Username = user.UserName,
+                    UserId = review.UserId,
+                    Text = review.Text,
+                    CreationDate = review.CreationDate.Year.ToString() + "-" + review.CreationDate.Month.ToString() + "-" + review.CreationDate.Day.ToString(),
+                    EngineDisplacement = review.EngineDisplacement,
+                    EnginePower = review.EnginePower,
+                    Likes = review.Likes,
+                    Dislikes = review.Dislikes,
+                    Positives = review.Positives,
+                    Negatives = review.Negatives,
+                    FinalScore = review.FinalScore
+                });
+            }
+
+            return Ok(mappedReviews.Where(x => x.Username.Equals(userName)));
+        }
+
         [HttpGet]
         [Authorize(Roles = CarReviewRoles.ReviewUser)]
         public async Task<IActionResult> Get()
@@ -110,7 +230,39 @@ namespace CarReview.API.Controllers
 
             var reviews = await _context.Reviews.ToListAsync();
 
-            return Ok(reviews.Select((p) => _mapper.Map<GetReviewDTO>(p)));
+            var mappedReviews = new List<GetReviewDTO2>();
+
+            foreach (var review in reviews)
+            {
+                var car = await GetCarById(review.FkCarId);
+                var user = await _userManager.FindByIdAsync(review.UserId);
+
+                mappedReviews.Add(new GetReviewDTO2
+                {
+                    Id = review.Id,
+                    Brand = car.Brand,
+                    Model = car.Model,
+                    Generation = car.Generation,
+                    Username = user.UserName,
+                    UserId = review.UserId,
+                    Text = review.Text,
+                    CreationDate = review.CreationDate.Year.ToString() + "-" + review.CreationDate.Month.ToString() + "-" + review.CreationDate.Day.ToString(),
+                    EngineDisplacement = review.EngineDisplacement,
+                    EnginePower = review.EnginePower,
+                    Likes = review.Likes,
+                    Dislikes = review.Dislikes,
+                    Positives = review.Positives,
+                    Negatives = review.Negatives,
+                    FinalScore = review.FinalScore
+                });
+            }
+
+            return Ok(mappedReviews);
+        }
+
+        private async Task<Car> GetCarById(int id)
+        {
+            return _context.Cars.FirstOrDefault(m => m.Id == id);
         }
 
         [HttpGet("{id}")]
@@ -134,7 +286,7 @@ namespace CarReview.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = CarReviewRoles.ReviewUser)]
-        public async Task<IActionResult> Update(int id, UpdateReviewDTO updatedReview)
+        public async Task<IActionResult> Update(int id, AddReviewDTO updatedReview)
         {
             if (_context.Reviews.Count() == 0)
             {
@@ -156,12 +308,12 @@ namespace CarReview.API.Controllers
                     return Forbid();
                 }
 
-                var car = _context.Cars.FirstOrDefault(m => m.Id == updatedReview.CarId);
+                //var car = _context.Cars.FirstOrDefault(m => m.Id == updatedReview.CarId);
 
-                if (car == null)
-                {
-                    return NotFound("Car by this id does not exist!");
-                }
+                //if (car == null)
+                //{
+                //    return NotFound("Car by this id does not exist!");
+                //}
 
                 review.Text = updatedReview.Text;
                 review.EngineDisplacement = updatedReview.EngineDisplacement;
@@ -169,8 +321,6 @@ namespace CarReview.API.Controllers
                 review.Positives = updatedReview.Positives;
                 review.Negatives = updatedReview.Negatives;
                 review.FinalScore = updatedReview.FinalScore;
-                review.FinalScore = updatedReview.FinalScore;
-                review.FkCarId = updatedReview.CarId;
 
                 _context.Update(review);
                 await _context.SaveChangesAsync();
@@ -236,9 +386,9 @@ namespace CarReview.API.Controllers
             return Ok(new ResponsesResultDTO() { Likes = sumLikes, Dislikes = sumDislikes });
         }
 
-        [HttpGet("{id}/GetReviewCount")]
+        [HttpGet("{userId}/GetReviewCount")]
         [Authorize(Roles = CarReviewRoles.ReviewUser)]
-        public async Task<IActionResult> GetReviewCount(int id)
+        public async Task<IActionResult> GetReviewCount(string userId)
         {
             var allReviews = await _context.Reviews.ToListAsync();
 
@@ -247,7 +397,7 @@ namespace CarReview.API.Controllers
                 return NotFound("Currently there are no reviews added!");
             }
 
-            var reviews = await _context.Reviews.Where(x => x.UserId.Equals(id)).ToListAsync();
+            var reviews = await _context.Reviews.Where(x => x.UserId.Equals(userId)).ToListAsync();
 
             var count = reviews.Count();
 
@@ -259,16 +409,16 @@ namespace CarReview.API.Controllers
             return Ok(count);
         }
 
-        [HttpGet("{id}/GetByUserId")]
+        [HttpGet("{userId}/GetByUserId")]
         [Authorize(Roles = CarReviewRoles.ReviewUser)]
-        public async Task<IActionResult> GetByUserId(string id)
+        public async Task<IActionResult> GetByUserId(string userId)
         {
             if (_context.Reviews.Count() == 0)
             {
                 return NotFound("Currently there are no reviews added!");
             }
 
-            var reviews = await _context.Reviews.Where(x => x.UserId.Equals(id)).ToListAsync();
+            var reviews = await _context.Reviews.Where(x => x.UserId.Equals(userId)).ToListAsync();
 
             if (reviews.Count() == 0)
             {

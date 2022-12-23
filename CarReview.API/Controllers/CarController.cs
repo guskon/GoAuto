@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using CarReview.API.Auth.Model;
+using CarReview.API.DTOs;
 using CarReview.API.Models;
 using CarReview.API.Repository;
-using CarReview.API.DTOs;
 using Microsoft.AspNetCore.Authorization;
-using CarReview.API.Auth.Model;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -117,7 +117,19 @@ namespace CarReview.API.Controllers
 
                 await _context.AddAsync(newCar);
                 await _context.SaveChangesAsync();
-                return StatusCode(201);
+
+                var returnCar = new GetCarDTO
+                {
+                    Id = newCar.Id,
+                    Brand = newCar.Brand,
+                    Model = newCar.Model,
+                    Generation = newCar.Generation,
+                    StartYear = newCar.StartYear.Year.ToString(),
+                    EndYear = newCar.EndYear.Year.ToString(),
+                    UserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                };
+            
+                return CreatedAtAction(nameof(Create), returnCar);
             }
             
             return BadRequest("Model is not valid!");

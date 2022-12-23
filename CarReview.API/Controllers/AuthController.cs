@@ -68,7 +68,7 @@ namespace CarReview.API.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            var accessToken = _jwtTokenService.CreateAccessToken(user.UserName, user.Id, roles);
+            var accessToken = await _jwtTokenService.CreateAccessToken(user.UserName, user.Id, roles);
 
             return Ok(new SuccessfulLoginDTO(accessToken));
         }
