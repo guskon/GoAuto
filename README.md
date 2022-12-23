@@ -49,9 +49,485 @@ Pav. 1 pavaizduota kuriamos sistemos diegimo diagrama. Sistemos talpinimui yra n
 
 <div align="center">Pav. 1 Sistemos GoAuto diegimo diagrama</div>
 
-## API specifikacija
+# API specifikacija
 
-### Automobilių metodai
+## Automobilių metodai
+
+### GET API/Cars
+
+Metodas yra prieinamas tik administratoriams ir grąžina visus sukurtus automobilius
+
+#### Metodo URL
+
+`https://localhost:7221/API/Cars`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Cars`
+
+#### Atsako pavyzdys
+
+```
+[
+    {
+        "id": 1,
+        "brand": "Audi",
+        "model": "A4",
+        "generation": "B7",
+        "startYear": "2004",
+        "endYear": "2008",
+        "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+    },
+    {
+        "id": 2,
+        "brand": "Audi",
+        "model": "A4",
+        "generation": "B8",
+        "startYear": "2007",
+        "endYear": "2015",
+        "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+    }
+]
+```
+### GET API/Cars/{id}
+
+Metodas yra prieinamas tik administratoriams ir grąžina automobilį pagal id
+
+#### Metodo URL
+
+`https://localhost:7221/API/Cars/{id}`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Cars/1`
+
+#### Atsako pavyzdys
+
+```
+{
+  "id": 1,
+  "brand": "Audi",
+  "model": "A4",
+  "generation": "B7",
+  "startYear": "2004",
+  "endYear": "2008",
+  "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+}
+
+```
+### PUT API/Cars/{id}
+
+Metodas yra prieinamas tik administratoriams ir atnaujina automobilį pagal id
+
+#### Metodo URL
+
+`https://localhost:7221/API/Cars/{id}`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| No content   | 204   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+
+#### Parametrai
+
+| Pavadinimas  | Ar būtinas? |    Apibūdinimas                | Pavyzdys |
+| ------------ |-------------|--------------------------------|----------|
+| brand        | Taip        | Automobilio markė              | Audi     |
+| model        | Taip        | Automobilio modelis            | A6       |
+| generation   | Taip        | Automobilio karta              | C6       |
+| startYear    | Taip        | Modelio gamybos pradžios metai | 2004     |
+| endYear      | Taip        | Modelio gamybos pabaigos metai | 2011     |
+
+
+#### Užklausos pavyzdys
+
+`PUT https://localhost:7221/API/Cars/1`
+
+```
+{
+  "brand": "Audi",
+  "model": "A4",
+  "generation": "B7",
+  "startYear": "2004",
+  "endYear": "2009"
+}
+
+```
+
+#### Atsako pavyzdys
+
+```
+Atsako kodas 204
+
+```
+
+### GET API/Cars/{id}
+
+Metodas yra prieinamas tik administratoriams ir grąžina automobilį pagal id
+
+#### Metodo URL
+
+`https://localhost:7221/API/Cars/{id}`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Cars/1`
+
+#### Atsako pavyzdys
+
+```
+{
+  "id": 1,
+  "brand": "Audi",
+  "model": "A4",
+  "generation": "B7",
+  "startYear": "2004",
+  "endYear": "2008",
+  "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+}
+
+```
+### POST API/Cars
+
+Metodas yra prieinamas tik administratoriams ir sukuria naują automobilį
+
+#### Metodo URL
+
+`https://localhost:7221/API/Cars/`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| Created      | 201   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+
+#### Parametrai
+
+| Pavadinimas  | Ar būtinas? |    Apibūdinimas                | Pavyzdys |
+| ------------ |-------------|--------------------------------|----------|
+| brand        | Taip        | Automobilio markė              | Audi     |
+| model        | Taip        | Automobilio modelis            | A6       |
+| generation   | Taip        | Automobilio karta              | C6       |
+| startYear    | Taip        | Modelio gamybos pradžios metai | 2004     |
+| endYear      | Taip        | Modelio gamybos pabaigos metai | 2011     |
+
+
+#### Užklausos pavyzdys
+
+`POST https://localhost:7221/API/Cars/`
+
+```
+{
+  "brand": "Audi",
+  "model": "A4",
+  "generation": "B7",
+  "startYear": "2004",
+  "endYear": "2009"
+}
+
+```
+
+#### Atsako pavyzdys
+
+```
+{
+  "id": 10,
+  "brand": "Audi",
+  "model": "A4",
+  "generation": "B7",
+  "startYear": "2004",
+  "endYear": "2009",
+  "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+}
+
+```
+
+### DELETE API/Cars/{id}
+
+Metodas yra prieinamas tik administratoriams ir ištrina automobilį pagal id
+
+#### Metodo URL
+
+`https://localhost:7221/API/Cars/{id}`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| No content   | 204   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+
+#### Užklausos pavyzdys
+
+`DELETE https://localhost:7221/API/Cars/1`
+
+#### Atsako pavyzdys
+
+```
+Atsako kodas 204
+
+```
+
+### GET API/Cars/{brand}/FilterByBrand
+
+Metodas yra prieinamas tik administratoriams ir išfiltruoja automobilius pagal markę
+
+#### Metodo URL
+
+`https://localhost:7221/API/Cars/{brand}/FilterByBrand`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| Ok           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Cars/Audi/FilterByBrand`
+
+#### Atsako pavyzdys
+
+```
+[
+  {
+    "id": 3,
+    "brand": "Audi",
+    "model": "A4",
+    "generation": "B8",
+    "startYear": "2007",
+    "endYear": "2015",
+    "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+  },
+  {
+    "id": 4,
+    "brand": "Audi",
+    "model": "A4",
+    "generation": "B9",
+    "startYear": "2006",
+    "endYear": "2015",
+    "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+  },
+  {
+    "id": 10,
+    "brand": "Audi",
+    "model": "A3",
+    "generation": "8P",
+    "startYear": "2004",
+    "endYear": "2010",
+    "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+  }
+]
+
+```
+
+### POST API/Cars/FilterByModel
+
+Metodas yra prieinamas tik administratoriams ir išfiltruoja automobilius pagal modelį
+
+#### Metodo URL
+
+`https://localhost:7221/API/Cars/FilterByModel`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+
+#### Parametrai
+
+| Pavadinimas  | Ar būtinas? |    Apibūdinimas                | Pavyzdys                             |
+| ------------ |-------------|--------------------------------|--------------------------------------|
+| brand        | Taip        | Automobilio markė              | Audi                                 |
+| model        | Taip        | Automobilio modelis            | A6                                   |
+| generation   | Taip        | Automobilio karta              | C6                                   |
+| startYear    | Taip        | Modelio gamybos pradžios metai | 2004                                 |
+| endYear      | Taip        | Modelio gamybos pabaigos metai | 2011                                 |
+| userId       | Taip        | Sukūrusio naudotojo id         | 1012f8e2-fe89-45fe-92d6-678730085ece |
+
+
+#### Užklausos pavyzdys
+
+`POST https://localhost:7221/API/Cars/FilterByModel`
+
+```
+{
+  "model": "A4",
+  "filteredCars": [
+     {
+     "id": 3,
+     "brand": "Audi",
+     "model": "A4",
+     "generation": "B8",
+     "startYear": "2007",
+     "endYear": "2015",
+     "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+   },
+   {
+     "id": 4,
+     "brand": "Audi",
+     "model": "A4",
+     "generation": "B9",
+     "startYear": "2006",
+     "endYear": "2015",
+     "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+   },
+   {
+     "id": 10,
+     "brand": "Audi",
+     "model": "A3",
+     "generation": "8P",
+     "startYear": "2004",
+     "endYear": "2010",
+     "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+   }
+  ]
+}
+
+```
+
+#### Atsako pavyzdys
+
+```
+[
+  {
+    "id": 3,
+    "brand": "Audi",
+    "model": "A4",
+    "generation": "B8",
+    "startYear": "2007",
+    "endYear": "2015",
+    "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+  },
+  {
+    "id": 4,
+    "brand": "Audi",
+    "model": "A4",
+    "generation": "B9",
+    "startYear": "2006",
+    "endYear": "2015",
+    "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+  }
+]
+
+```
+
+### POST API/Cars/GetIdByGeneration
+
+Metodas yra prieinamas tik administratoriams ir grąžina automobilio id pagal kartą
+
+#### Metodo URL
+
+`https://localhost:7221/API/Cars/GetIdByGeneration`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+
+#### Parametrai
+
+| Pavadinimas  | Ar būtinas? |    Apibūdinimas                | Pavyzdys                             |
+| ------------ |-------------|--------------------------------|--------------------------------------|
+| brand        | Taip        | Automobilio markė              | Audi                                 |
+| model        | Taip        | Automobilio modelis            | A6                                   |
+| generation   | Taip        | Automobilio karta              | C6                                   |
+| startYear    | Taip        | Modelio gamybos pradžios metai | 2004                                 |
+| endYear      | Taip        | Modelio gamybos pabaigos metai | 2011                                 |
+| userId       | Taip        | Sukūrusio naudotojo id         | 1012f8e2-fe89-45fe-92d6-678730085ece |
+
+
+#### Užklausos pavyzdys
+
+`POST https://localhost:7221/API/Cars/GetIdByGeneration`
+
+```
+{
+  "generation": "B8",
+  "filteredCars": [
+     {
+     "id": 3,
+     "brand": "Audi",
+     "model": "A4",
+     "generation": "B8",
+     "startYear": "2007",
+     "endYear": "2015",
+     "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+   },
+   {
+     "id": 4,
+     "brand": "Audi",
+     "model": "A4",
+     "generation": "B9",
+     "startYear": "2006",
+     "endYear": "2015",
+     "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+   }
+  ]
+}
+
+```
+
+#### Atsako pavyzdys
+
+```
+3
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
