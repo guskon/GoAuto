@@ -68,6 +68,7 @@ Metodas yra prieinamas tik administratoriams ir grąžina visus sukurtus automob
 | OK           | 200   |
 | Unauthorized | 401   |
 | Forbidden    | 403   |
+| Not found    | 404   |
 
 #### Užklausos pavyzdys
 
@@ -112,6 +113,7 @@ Metodas yra prieinamas tik administratoriams ir grąžina automobilį pagal id
 | OK           | 200   |
 | Unauthorized | 401   |
 | Forbidden    | 403   |
+| Not found    | 404   |
 
 #### Užklausos pavyzdys
 
@@ -147,6 +149,7 @@ Metodas yra prieinamas tik administratoriams ir atnaujina automobilį pagal id
 | Unauthorized | 401   |
 | Forbidden    | 403   |
 | Bad request  | 400   |
+| Not found    | 404   |
 
 #### Parametrai
 
@@ -196,6 +199,7 @@ Metodas yra prieinamas tik administratoriams ir grąžina automobilį pagal id
 | OK           | 200   |
 | Unauthorized | 401   |
 | Forbidden    | 403   |
+| Not found    | 404   |
 
 #### Užklausos pavyzdys
 
@@ -231,6 +235,7 @@ Metodas yra prieinamas tik administratoriams ir sukuria naują automobilį
 | Unauthorized | 401   |
 | Forbidden    | 403   |
 | Bad request  | 400   |
+| Not found    | 404   |
 
 #### Parametrai
 
@@ -289,6 +294,7 @@ Metodas yra prieinamas tik administratoriams ir ištrina automobilį pagal id
 | Unauthorized | 401   |
 | Forbidden    | 403   |
 | Bad request  | 400   |
+| Not found    | 404   |
 
 #### Užklausos pavyzdys
 
@@ -317,6 +323,7 @@ Metodas yra prieinamas tik administratoriams ir išfiltruoja automobilius pagal 
 | Unauthorized | 401   |
 | Forbidden    | 403   |
 | Bad request  | 400   |
+| Not found    | 404   |
 
 #### Užklausos pavyzdys
 
@@ -373,6 +380,7 @@ Metodas yra prieinamas tik administratoriams ir išfiltruoja automobilius pagal 
 | Unauthorized | 401   |
 | Forbidden    | 403   |
 | Bad request  | 400   |
+| Not found    | 404   |
 
 #### Parametrai
 
@@ -468,6 +476,7 @@ Metodas yra prieinamas tik administratoriams ir grąžina automobilio id pagal k
 | Unauthorized | 401   |
 | Forbidden    | 403   |
 | Bad request  | 400   |
+| Not found    | 404   |
 
 #### Parametrai
 
@@ -518,6 +527,223 @@ Metodas yra prieinamas tik administratoriams ir grąžina automobilio id pagal k
 3
 
 ```
+
+## Reakcijų į atsiliepimus metodai
+
+### POST API/Responses/
+
+Metodas yra prieinamas tik registruotiems vartotojams ir įrašo atsiliepimo įvertinima, bei pakeičia įvertinimo vertę atsiliepime
+
+#### Metodo URL
+
+`https://localhost:7221/API/Responses`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| Created      | 201   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+| Not found    | 404   |
+
+#### Parametrai
+
+| Pavadinimas  | Ar būtinas? |  Apibūdinimas        | Pavyzdys   |
+| ------------ |-------------|----------------------|------------|
+| brand        | Taip        | Automobilio markė    | Audi       |
+| model        | Taip        | Automobilio modelis  | A6         |
+
+
+
+#### Užklausos pavyzdys
+
+`POST https://localhost:7221/API/Responses`
+
+```
+{
+  "fkReviewId": 0,
+  "status": 1
+}
+
+```
+
+#### Atsako pavyzdys
+
+```
+Atsako kodas 201
+
+```
+
+### GET API/Responses/
+
+Metodas yra prieinamas tik registruotiems vartotojams ir grąžina visus atsiliepimų įvertinimus
+
+#### Metodo URL
+
+`https://localhost:7221/API/Responses`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+| Not found    | 404   |
+
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Responses`
+
+#### Atsako pavyzdys
+
+```
+[
+ {
+  "id": 1
+  "fkReviewId": 1,
+  "status": 1,
+  "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+ },
+ {
+  "id": 2
+  "fkReviewId": 3,
+  "status": 0,
+  "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+ },
+]
+
+```
+## Atsiliepimų metodai
+
+### POST API/Reviews
+
+Metodas yra prieinamas tik registuotiems vartotojams ir sukuria naują atsiliepimą
+
+#### Metodo URL
+
+`https://localhost:7221/API/Reviews`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| Created      | 201   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+| Not found    | 404   |
+
+#### Parametrai
+
+| Pavadinimas        | Ar būtinas? |    Apibūdinimas       | Pavyzdys   |
+| -------------------|-------------|-----------------------|------------|
+| brand              | Taip        | Automobilio markė     | Audi       |
+| model              | Taip        | Automobilio modelis   | A6         |
+| generation         | Taip        | Automobilio karta     | C6         |
+| text               | Taip        | Atsiliepimo tekstas   | Geras auto |
+| engineDisplacement | Taip        | Variklio tūris        | 2011       |
+| enginePower        | Taip        | Variklio galia        | 2011       |
+| positives          | Taip        | Pranašumai            | 2011       |
+| negatives          | Taip        | Trūkumai              | 2011       |
+| finalScore         | Taip        | Galutinis įvertinimas | 2011       |
+
+
+#### Užklausos pavyzdys
+
+`POST https://localhost:7221/API/Reviews`
+
+```
+{
+  "text": "Geras auto",
+  "engineDisplacement": 3,
+  "enginePower": 200,
+  "positives": "Gera kokybė",
+  "negatives": "Brangus remontas",
+  "finalScore": 8,
+  "brand": "Audi",
+  "model": "A4",
+  "generation": "B8"
+}
+
+```
+
+#### Atsako pavyzdys
+
+```
+{
+  "id": 14,
+  "text": "Geras auto",
+  "creationDate": "2022-12-23",
+  "engineDisplacement": 3,
+  "enginePower": 200,
+  "likes": 0,
+  "dislikes": 0,
+  "positives": "Gera kokybė",
+  "negatives": "Brangus remontas",
+  "finalScore": 8,
+  "username": "admin",
+  "brand": "Audi",
+  "model": "A4",
+  "generation": "B8",
+  "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+}
+
+```
+
+### GET API/Reviews
+
+Metodas yra prieinamas tik registuotiems vartotojams ir grąžina visus atsiliepimus
+
+#### Metodo URL
+
+`https://localhost:7221/API/Reviews`
+
+#### Atsakymų kodai
+
+| Pavadinimas  | Kodas |
+| ------------ |-------|
+| OK           | 200   |
+| Unauthorized | 401   |
+| Forbidden    | 403   |
+| Bad request  | 400   |
+| Not found    | 404   |
+
+#### Užklausos pavyzdys
+
+`GET https://localhost:7221/API/Reviews`
+
+
+#### Atsako pavyzdys
+
+```
+[
+  {
+    "id": 14,
+    "text": "Geras auto",
+    "creationDate": "2022-12-23",
+    "engineDisplacement": 3,
+    "enginePower": 200,
+    "likes": 0,
+    "dislikes": 0,
+    "positives": "Gera kokybe",
+    "negatives": "Brangus remontas",
+    "finalScore": 8,
+    "username": "admin",
+    "brand": "Audi",
+    "model": "A4",
+    "generation": "B8",
+    "userId": "1012f8e2-fe89-45fe-92d6-678730085ece"
+  }
+]
+
+```
+
+
 
 
 
