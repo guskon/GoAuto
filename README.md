@@ -48,7 +48,12 @@ Pav. 1 pavaizduota kuriamos sistemos diegimo diagrama. Sistemos talpinimui yra n
 
 
 <div align="center">Pav. 1 Sistemos GoAuto diegimo diagrama</div>
-                                                     
+
+## API specifikacija
+
+### Automobilių metodai
+
+
 
 
 
