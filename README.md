@@ -1025,15 +1025,63 @@ Metodas yra prieinamas tik registuotiems vartotojams ir grąžina atsiliepimus p
 
 ```
 
+# Vartotojo sąsaja
 
+## Pagrindinis meniu
 
+![Pagrindinis meniu](https://user-images.githubusercontent.com/79079004/209396805-19f594a6-ecaf-4c5c-aad3-dfc38e666a81.png)
 
+Pagrindinis meniu, kuris yra prieinamas neprisijungusiems vartotojams
 
+## Prisijungimo langas
 
+![Prisijungimo langas](https://user-images.githubusercontent.com/79079004/209396887-89650974-7734-4814-b975-c8dfe7f9be24.png)
 
+## Registracijos langas
 
+![Registracijos langas](https://user-images.githubusercontent.com/79079004/209396927-bfd44d4b-985d-4739-97af-8d3f12000925.png)
 
+## Tik administratoriui prieinamas automobilių langas
 
+![Administratoriaus automobilių langas](https://user-images.githubusercontent.com/79079004/209396965-b27568f6-02dd-4b84-b7b7-7068d15d7237.png)
+
+Šiame lange galima matyti naujo automobilio sukūrimo mygtuką ir taip pat jau egzituojančių automobilių atnaujinimo bei ištrynimo mygtukus
+
+## Automobilių sukūrimo modalas
+
+![Administratoriaus automobilių sukūrimo modalas](https://user-images.githubusercontent.com/79079004/209397045-e85ae25e-d871-4848-9d09-5a3fb4fdff86.png)
+
+## Automobilių atnaujinimo modalas
+
+![Administratoriaus automobilių atnaujinimo modalas](https://user-images.githubusercontent.com/79079004/209397095-db92bfd9-b069-4ae6-9c96-2da19f70f14f.png)
+
+## Tik administratoriui prieinamas visų atsiliepimų langas
+
+![Administratoriaus visų atsiliepimų langas](https://user-images.githubusercontent.com/79079004/209397112-e7e9f4e4-ed2d-43bb-972f-29b7d07d276e.png)
+
+Kaip galima matyti šiame lange, tik administratoriaus teises turintis vartotojas turi galimybę readaguoti bei pašalinti kiekvieną atsiliepimą
+
+## Visiems vartotojams prieinamas savo atsiliepimų langas
+
+![Visų vartotojų matomas savo atsiliepimų langas](https://user-images.githubusercontent.com/79079004/209398968-5c2a9f3b-f0df-4339-9bbd-fe3c4e672ad7.png)
+
+Kaip galima matyti lange, kiekvienas vartotojas turi galimybę redaguoti, sukurti naują, bei pašalinti kiekvieną savo atsiliepimą
+
+## Visiems vartotojams prieinamas savo atsiliepimų atnaujinimo modalas
+
+![Visų vartotojų atsiliepimo atnaujinimo modalas](https://user-images.githubusercontent.com/79079004/209398179-e288ed82-3804-4e65-997b-aa411e1c315a.png)
+
+## Visiems vartotojams prieinamas atsiliepimų sukūrimo modalas
+
+![Visų vartotojų atsiliepimo sukūrimo modalas](https://user-images.githubusercontent.com/79079004/209398306-f6359159-4265-4b50-a7e0-2c3828b07eaf.png)
+
+## Paprastiems vartotojams prieinamas visų atsiliepimų langas
+
+![Vartotojo matomas visų atsiliepimų langas](https://user-images.githubusercontent.com/79079004/209399034-867210e7-a417-4b3b-abfc-d7c8040dd98e.png)
+
+# Išvados
+
+Šio modulio eigoje, vystant aplikacijos sąsają (angl. "API") neteko susidurti su itin dideliais sunkumais, kadangi patirtis dirbant .NET technologija buvo pakankama, jog susidoroti su užduotimi. Tačiau visai kitokia situacija susidarė kuriant svetainės vartotojo sąsają (angl. "UI"). Nors ir "JavaScript" kalbos karkasas yra vienas iš paprasčiausių išmokti, susidūriau su ypatingais sunkumais, kadangi mano asmeninė patirtis konstruojant "front-end" yra menka. Bet tikrai nesuklysiu teigiant, kad atliekant paskutinį, t.y. trečiąjį laboratorinį darbą išmokau tikrai daug ir dar kartą kuriant varototojo sąsaja problemų kiltų ženkliai mažiau.
 
 
 
